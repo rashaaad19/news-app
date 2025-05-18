@@ -24,6 +24,9 @@ class NewsDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final firstWord = newsContent.split(' ').first;
+    final remainingContent = newsContent.substring(firstWord.length).trim();
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
@@ -63,7 +66,7 @@ class NewsDetails extends StatelessWidget {
                           TextSpan(
                             children: [
                               TextSpan(
-                                text: 'LONDON — ',
+                                text: '$firstWord — ',
                                 style: TextStyle(
                                   fontSize: 14.sp,
                                   color: Color(0xFF2E0505),
@@ -73,7 +76,7 @@ class NewsDetails extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text: newsContent,
+                                text: remainingContent,
                                 style: TextStyle(
                                   fontSize: 14.sp,
                                   color: Color(0xFF2E0505),

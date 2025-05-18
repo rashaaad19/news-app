@@ -546,11 +546,23 @@ class _HomeScreenState extends State<HomeScreen> {
         child:
             //* Condtionaly rendering the UI based on Loading and Response state
             isLoading
-                ? const CircularProgressIndicator()
+                ? const CircularProgressIndicator(color: Color(0xFFFF3A44))
                 : newsResponse == null
                 ? ElevatedButton(
                   onPressed: fetchNews,
-                  child: const Text('Fetch News'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(
+                      0xFFFF3A44,
+                    ), // button background color
+                    foregroundColor: Colors.white, // text color
+                  ),
+                  child: Text(
+                    'See Latest News',  
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 18.sp,
+                    ),
+                  ),
                 )
                 : _buildUI(),
       ),
