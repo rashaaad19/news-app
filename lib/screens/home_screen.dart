@@ -427,7 +427,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
 
-                          // Favorites Column with top dash
+                          //* Favorites Column with top dash
                           Stack(
                             clipBehavior: Clip.none,
                             children: [

@@ -175,7 +175,7 @@ class NewsDetails extends StatelessWidget {
         ),
       ),
 
-      //! Favourite button 
+      //! Favourite button
       floatingActionButton: Padding(
         padding: EdgeInsets.only(bottom: 48.h),
         child: GestureDetector(

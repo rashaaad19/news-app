@@ -25,14 +25,14 @@ class myApp extends StatelessWidget {
               color: Colors.white, 
             ),
             colorScheme: ColorScheme.light(
-              background: Colors.white,
+              // background: Colors.white,
               surface: Colors.white,
               onSurface: Colors.black,
             ),
           ),
 
           title: 'News App',
-          home: const NewsDetails(),
+          home: const HomeScreen(),
         );
       },
     );
