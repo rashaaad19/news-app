@@ -5,7 +5,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class NewsDetails extends StatelessWidget {
-  const NewsDetails({super.key});
+  final String newsImg;
+  final String newsTitle;
+  final String newsAuthor;
+  final String newsDescription;
+  final String newsContent;
+  final String newsPublishedAt;
+
+  const NewsDetails({
+    super.key,
+    required this.newsImg,
+    required this.newsTitle,
+    required this.newsAuthor,
+    required this.newsDescription,
+    required this.newsContent,
+    required this.newsPublishedAt,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +33,8 @@ class NewsDetails extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //! Background image
-                Image.asset(
-                  'assets/images/1b253b61593c0eac981b4da390568868d72bc803.png',
+                Image.network(
+                  newsImg,
                   width: 375.w,
                   height: 400.h,
                   fit: BoxFit.cover,
@@ -58,15 +73,7 @@ class NewsDetails extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text:
-                                    'Cryptocurrencies “have no intrinsic value,” and people who invest in them should be prepared to lose all their money, Bank of England Governor Andrew Bailey said.\n\n'
-                                    'Digital currencies like Bitcoin, Ether, and even Dogecoin have been on a tear this year, reminding some investors of the 2017 crypto bubble in which Bitcoin blasted toward \$20,000, only to sink as low as \$3,122 a year later.\n\n'
-                                    'Asked at a press conference Thursday about the rising value of cryptocurrencies, Bailey said: “They have no intrinsic value. That doesn’t mean to say people don’t put value on them, because they can have extrinsic value. But they have no intrinsic value.”\n\n'
-                                    '“I’m going to say this very bluntly again,” he added. “Buy them only if you’re prepared to lose all your money.”\n\n'
-                                    'Bailey’s comments echoed a similar warning from the U.K.’s Financial Conduct Authority.\n\n'
-                                    '“Investing in cryptoassets, or investments and lending linked to them, generally involves taking very high risks with investors’ money,” the financial services watchdog said in January.\n\n'
-                                    '“If consumers invest in these types of products, they should be prepared to lose all their money.”\n\n'
-                                    'Bailey, who was formerly the chief executive of the FCA, has long been a skeptic of crypto. In 2017, he warned: “If you want to invest in Bitcoin, be prepared to lose all your money.”',
+                                text: newsContent,
                                 style: TextStyle(
                                   fontSize: 14.sp,
                                   color: Color(0xFF2E0505),
@@ -107,7 +114,7 @@ class NewsDetails extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Sunday, 9 May 2021',
+                          newsPublishedAt,
                           style: TextStyle(
                             fontFamily: 'Nunito',
                             fontWeight: FontWeight.w600,
@@ -117,7 +124,10 @@ class NewsDetails extends StatelessWidget {
                         ),
                         SizedBox(height: 8.h),
                         Text(
-                          'Crypto investors should be prepared to lose all their money, BOE governor says.',
+                          newsDescription,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+
                           style: TextStyle(
                             fontSize: 16.sp,
                             color: Color(0xFF2E0505),
@@ -127,7 +137,7 @@ class NewsDetails extends StatelessWidget {
                         ),
                         SizedBox(height: 8.h),
                         Text(
-                          'Published by Ryan Browne',
+                          newsAuthor,
                           style: TextStyle(
                             fontFamily: 'Nunito',
                             fontWeight: FontWeight.w800,
@@ -152,7 +162,7 @@ class NewsDetails extends StatelessWidget {
                   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   child: GestureDetector(
                     onTap: () {
-                      // Navigator.pop(context);
+                      Navigator.pop(context);
                     },
                     child: Container(
                       width: 32.w,

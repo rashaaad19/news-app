@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:newsapp/screens/home_screen.dart';
 import 'package:newsapp/screens/newsDetails_screen.dart';
+import 'package:newsapp/screens/newsFetch_screen.dart';
 
 void main() {
   runApp(myApp());
@@ -9,7 +10,6 @@ void main() {
 
 class myApp extends StatelessWidget {
   const myApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:newsapp/data/models/news_model.dart';
+import 'package:newsapp/repos/news_repo.dart';
+import 'package:newsapp/screens/newsDetails_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,24 +14,25 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String _selectedCategory = 'Healthy';
+  final NewsRepo newsRepo = NewsRepo();
+  NewsResponseModel? newsResponse;
+  bool isLoading = false;
 
-  final List<Map<String, dynamic>> newsCards = [
-    {
-      'author': 'Ryan Browne',
-      'title':
-          'Crypto investors should be prepared to lose all their money, BOE governor says',
-      'description':
-          '“I’m going to say this very bluntly again,” he added. “Buy them only if you’re prepared to lose all your money.”',
-      'img': 'assets/images/1b253b61593c0eac981b4da390568868d72bc803.png',
-    },
-    {
-      'author': 'Ryan Browne',
-      'title': 'Asia-Pacific markets trade broadly higher, oil prices climb',
-      'description':
-          'Stock markets in Asia-Pacific were broadly higher on Monday following “a big miss” in the April U.S. jobs report, while oil futures advanced.”',
-      'img': 'assets/images/5baa12813c0e6239a2ea7f559e4ef62cf9f3e29c.png',
-    },
-  ];
+  Future<void> fetchNews() async {
+    //* Start loading
+    setState(() {
+      isLoading = true;
+    });
+
+    //* Fetch news
+    NewsResponseModel? response = await newsRepo.getNews();
+
+    //* Store response and stop loading
+    setState(() {
+      newsResponse = response;
+      isLoading = false;
+    });
+  }
 
   final List<Map<String, dynamic>> categoryCards = [
     {
@@ -52,8 +56,10 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildUI() {
+    //* Acesss news from the model as a list
+    final newsItems = newsResponse!.news.toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -138,89 +144,125 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 15.w),
                   child: SizedBox(
                     height: 260.h,
-                    child: SingleChildScrollView(
+                    child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children:
-                            newsCards.map((card) {
-                              return Padding(
-                                padding: EdgeInsets.only(right: 12.w),
-                                child: SizedBox(
-                                  width: 321.w,
-                                  height: 260.h,
-                                  child: Stack(
-                                    children: [
-                                      Container(
-                                        width: double.infinity,
-                                        height: double.infinity,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            8.r,
-                                          ),
-                                          image: DecorationImage(
-                                            image: AssetImage(card['img']),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
+                      itemCount: newsItems.length,
+                      itemBuilder: (context, index) {
+                        final news = newsItems[index];
+                        final newsImg =
+                            news.urlToImage ??
+                            'https://s.france24.com/media/display/e6279b3c-db08-11ee-b7f5-005056bf30b7/w:1280/p:16x9/news_en_1920x1080.jpg';
+                        final newsTitle = news.title ?? 'Breaking News';
+                        final newsAuthor = news.author ?? 'Unknown';
+                        final newsDescription = news.description ?? '';
+                        final newsContent = news.content ?? '';
+                        final newsPublishedAt = news.publishedAt ?? '';
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => NewsDetails(
+                                      newsImg: newsImg,
+                                      newsTitle: newsTitle,
+                                      newsAuthor: newsAuthor,
+                                      newsDescription: newsDescription,
+                                      newsContent: newsContent,
+                                      newsPublishedAt: newsPublishedAt,
+                                    ),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 12.w),
+                            child: SizedBox(
+                              width: 321.w,
+                              height: 260.h,
+                              child: Stack(
+                                children: [
+                                  //* Image Background
+                                  Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                      image: DecorationImage(
+                                        image: NetworkImage(newsImg),
+                                        fit: BoxFit.cover,
                                       ),
-                                      Container(
-                                        width: double.infinity,
-                                        height: double.infinity,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            8.r,
-                                          ),
-                                          color: Colors.black.withOpacity(0.3),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(16.w),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(height: 80.h),
-                                            Text(
-                                              'by ${card['author']}',
-                                              style: TextStyle(
-                                                fontSize: 10.sp,
-                                                fontWeight: FontWeight.w800,
-                                                color: Colors.white,
-                                                fontFamily: 'DM Serif Text',
-                                              ),
-                                            ),
-                                            SizedBox(height: 2.h),
-                                            Text(
-                                              card['title'],
-                                              style: TextStyle(
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w700,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            SizedBox(height: 30.h),
-                                            Text(
-                                              card['description'],
-                                              style: TextStyle(
-                                                fontSize: 10.sp,
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            }).toList(),
-                      ),
+
+                                  //* Dark Overlay
+                                  Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                      color: Colors.black.withOpacity(0.3),
+                                    ),
+                                  ),
+
+                                  //* Content
+                                  Padding(
+                                    padding: EdgeInsets.all(16.w),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 80.h),
+
+                                        //* Author
+                                        Text(
+                                          'by $newsAuthor',
+                                          style: TextStyle(
+                                            fontSize: 10.sp,
+                                            fontWeight: FontWeight.w800,
+                                            color: Colors.white,
+                                            fontFamily: 'DM Serif Text',
+                                          ),
+                                        ),
+
+                                        SizedBox(height: 2.h),
+
+                                        //* Title
+                                        Text(
+                                          newsTitle,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+
+                                        SizedBox(height: 30.h),
+
+                                        //* Description
+                                        Text(
+                                          newsDescription,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 10.sp,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                ),
-
-                //! Third section -- Category scrollbar
+                ), //! Third section -- Category scrollbar
                 SizedBox(height: 24.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15.w),
@@ -374,9 +416,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         }).toList(),
                   ),
                 ),
-                SizedBox(
-                  height: 80.h,
-                ), 
+                SizedBox(height: 80.h),
               ],
             ),
           ),
@@ -450,7 +490,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                               Positioned(
-                                top: -12.h, 
+                                top: -12.h,
                                 left: 0,
                                 right: 0,
                                 child: Center(
@@ -495,6 +535,24 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child:
+            //* Condtionaly rendering the UI based on Loading and Response state
+            isLoading
+                ? const CircularProgressIndicator()
+                : newsResponse == null
+                ? ElevatedButton(
+                  onPressed: fetchNews,
+                  child: const Text('Fetch News'),
+                )
+                : _buildUI(),
       ),
     );
   }
