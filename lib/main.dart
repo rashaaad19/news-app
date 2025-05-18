@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:newsapp/screens/home_screen.dart';
+import 'package:newsapp/screens/newsDetails_screen.dart';
 
 void main() {
   runApp(myApp());
@@ -31,7 +32,7 @@ class myApp extends StatelessWidget {
           ),
 
           title: 'News App',
-          home: const MyHomePage(),
+          home: const NewsDetails(),
         );
       },
     );

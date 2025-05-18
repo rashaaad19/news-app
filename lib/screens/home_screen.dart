@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   String _selectedCategory = 'Healthy';
 
   final List<Map<String, dynamic>> newsCards = [
@@ -376,7 +376,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 SizedBox(
                   height: 80.h,
-                ), // Add bottom padding for the navigation bar
+                ), 
               ],
             ),
           ),
