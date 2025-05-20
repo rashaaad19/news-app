@@ -6,7 +6,7 @@ class NewsRepo {
   Future<NewsResponseModel?> getNews() async {
     try {
       var response = await dio.get(
-        'https://newsapi.org/v2/everything?q=tesla&from=2025-04-19&sortBy=publishedAt&apiKey=024a2e8d9ec84a21b5c6b181ac0b4c08',
+        'https://newsapi.org/v2/everything?q=tesla&from=2025-04-20&sortBy=publishedAt&apiKey=024a2e8d9ec84a21b5c6b181ac0b4c08',
       );
       if (response.statusCode! > 299) {
         return null;

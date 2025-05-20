@@ -33,6 +33,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.1.0
   dio: ^5.8.0+1
+  flutter_bloc: ^9.1.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -120,9 +121,10 @@ fonts:
         weight: 600
       - asset: assets/fonts/Nunito-SemiBoldItalic.ttf
         weight: 600
-        style: italic
-        
-         #   - family: Trajan Pro
+        style:
+          italic
+
+          #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf

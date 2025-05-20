@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:newsapp/cubit/news_cubit.dart';
+import 'package:newsapp/cubit/news_state.dart';
 import 'package:newsapp/data/models/news_model.dart';
 import 'package:newsapp/repos/news_repo.dart';
 import 'package:newsapp/screens/newsDetails_screen.dart';
@@ -14,25 +17,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String _selectedCategory = 'Healthy';
-  final NewsRepo newsRepo = NewsRepo();
-  NewsResponseModel? newsResponse;
-  bool isLoading = false;
-
-  Future<void> fetchNews() async {
-    //* Start loading
-    setState(() {
-      isLoading = true;
-    });
-
-    //* Fetch news
-    NewsResponseModel? response = await newsRepo.getNews();
-
-    //* Store response and stop loading
-    setState(() {
-      newsResponse = response;
-      isLoading = false;
-    });
-  }
 
   final List<Map<String, dynamic>> categoryCards = [
     {
@@ -56,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
-  Widget _buildUI() {
+  Widget _buildUI(NewsResponseModel newsResponse) {
     //* Acesss news from the model as a list
     final newsItems = newsResponse!.news.toList();
 
@@ -543,28 +527,30 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child:
-            //* Condtionaly rendering the UI based on Loading and Response state
-            isLoading
-                ? const CircularProgressIndicator(color: Color(0xFFFF3A44))
-                : newsResponse == null
-                ? ElevatedButton(
-                  onPressed: fetchNews,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(
-                      0xFFFF3A44,
-                    ), // button background color
-                    foregroundColor: Colors.white, // text color
-                  ),
-                  child: Text(
-                    'See Latest News',  
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 18.sp,
-                    ),
-                  ),
-                )
-                : _buildUI(),
+        //* Initialize bloc builder and control UI through states
+        child: BlocBuilder<NewsCubit, NewsState>(
+          builder: (context, state) {
+            if (state is NewsLoading) {
+              return const CircularProgressIndicator(color: Color(0xFFFF3A44));
+            }
+            if (state is NewsLoaded) {
+              return _buildUI(state.newsResponse);
+            }
+
+            //* Initial state — show button to trigger fetch
+            return ElevatedButton(
+              onPressed: () => context.read<NewsCubit>().fetchNews(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFF3A44),
+                foregroundColor: Colors.white,
+              ),
+              child: Text(
+                'See Latest News',
+                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18.sp),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
