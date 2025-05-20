@@ -3,8 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:newsapp/cubit/news_cubit.dart';
 import 'package:newsapp/repos/news_repo.dart';
 import 'package:newsapp/screens/home_screen.dart';
-import 'package:newsapp/screens/newsDetails_screen.dart';
-import 'package:newsapp/screens/newsFetch_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {

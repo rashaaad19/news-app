@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:newsapp/cubit/news_cubit.dart';
 import 'package:newsapp/cubit/news_state.dart';
 import 'package:newsapp/data/models/news_model.dart';
-import 'package:newsapp/repos/news_repo.dart';
 import 'package:newsapp/screens/newsDetails_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -42,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildUI(NewsResponseModel newsResponse) {
     //* Acesss news from the model as a list
-    final newsItems = newsResponse!.news.toList();
+    final newsItems = newsResponse.news.toList();
 
     return Scaffold(
       appBar: AppBar(
